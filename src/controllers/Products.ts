@@ -48,7 +48,7 @@ export const createProducts:RequestHandler = async (req,res,next)=>{
         throw new AppError('NO PRODUCTS',404)
     }
     res.status(201).json({
-        status:'success',
+        status:'Success',
         data:newProduct
     })
 }

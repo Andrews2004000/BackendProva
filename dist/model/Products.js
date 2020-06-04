@@ -38,7 +38,8 @@ const ProductsSchema = new mongoose_1.default.Schema({
     },
     colorsAvailable: {
         type: String,
-        default: 'Not Specified'
+        enum: ["red", "blue", "green", "yellow", "grey", "Black", "All Available"],
+        default: "All Available"
     },
     price: {
         type: Number,

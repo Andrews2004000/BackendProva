@@ -47,7 +47,7 @@ exports.createProducts = async (req, res, next) => {
         throw new AppError_1.default('NO PRODUCTS', 404);
     }
     res.status(201).json({
-        status: 'success',
+        status: 'Success',
         data: newProduct
     });
 };

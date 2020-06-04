@@ -31,6 +31,8 @@ exports.signUp = async (req, res, next) => {
         throw new AppError_1.default('No Passowrd', 404);
     }
     userData.role = 'client';
+    userData.password = HashPassword;
+    userData.passwordConfirmation = HashPassword;
     const newUser = await Auth_1.default.create(userData);
     const token = await newUser.getJwt();
     SendCookieToken(res, token);

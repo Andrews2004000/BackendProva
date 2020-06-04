@@ -33,7 +33,8 @@ if(!HashPassword){
     throw new AppError('No Passowrd',404)
 }
 userData.role = 'client'
-
+userData.password = HashPassword
+userData.passwordConfirmation = HashPassword
 const newUser = await User.create(userData)
 
 const token = await newUser.getJwt()

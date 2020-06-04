@@ -8,6 +8,7 @@ export const getAllProducts:RequestHandler = async(req,res,next)=>{
     const reqQuery = {...req.query}
     delete reqQuery.owned;
     delete reqQuery.search;
+   const querySearch = req.query.search as string;
     let productQuery =  Product.find(reqQuery)
 
     if(req.token && req.query.owned === 'true'){
@@ -17,9 +18,9 @@ export const getAllProducts:RequestHandler = async(req,res,next)=>{
             productQuery = productQuery.where('vendor').equals(currentUserId)
         }
     }
-        if(req.query.search){
+        if(querySearch){
           
-            const searchKeyWord = req.query.search.split('+').join(' ') as string;
+            const searchKeyWord = querySearch.split('+').join(' ') as string;
             productQuery.where('title').regex(new RegExp(searchKeyWord,'i'))
         
     }
@@ -31,9 +32,9 @@ export const getAllProducts:RequestHandler = async(req,res,next)=>{
 }
 
 export const getProduct:RequestHandler = async (req,res,next)=>{
-    const product = await Product.findById(req.params.prodId)
+    const product = await Product.findById(req.params.prodId).populate('vendor')
     if(!product){
-        throw new AppError('NO PRODUCTS',404)
+        throw new AppError('NO PRODUCTS',404);
     }
     res.status(200).json({
         status:'success',

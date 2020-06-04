@@ -33,8 +33,8 @@ router.route('/')
     .get(UserController.getAllUsers, AppFeaures_1.protect);
 /// Routes For Updatings
 router.route('/userUpdatings')
-    .patch(UserController.upadteUser, AppFeaures_1.protect, AppFeaures_1.restrictRole('admin'))
-    .post(UserController.logOut, AppFeaures_1.protect, AppFeaures_1.restrictRole('admin'))
-    .delete(UserController.deletAccount, AppFeaures_1.protect, AppFeaures_1.restrictRole('admin'));
+    .patch(UserController.upadteUser, AppFeaures_1.protect, AppFeaures_1.restrictRole('admin' || 'vendor'))
+    .post(UserController.logOut, AppFeaures_1.protect, AppFeaures_1.restrictRole('admin' || 'vendor'))
+    .delete(UserController.deletAccount, AppFeaures_1.protect, AppFeaures_1.restrictRole('admin' || 'vendor'));
 exports.default = router;
 //# sourceMappingURL=Auth.js.map

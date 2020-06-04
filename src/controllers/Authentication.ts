@@ -34,7 +34,7 @@ if(!HashPassword){
 }
 role = 'client'
 
-const newUser = await User.create()
+const newUser = await User.create(req.body)
 if(!newUser){
     throw new AppError('No Passowrd',404) 
 }
@@ -53,7 +53,7 @@ res.status(200).json({
 }
 export const login:RequestHandler = async(req,res,next)=>{
 const {email,password} = req.body
-if(!email && password){
+if(!email && !password){
     throw new AppError('No Passowrd',404)
 }
 const user = await User.findOne({email}).select('+password')
@@ -64,12 +64,13 @@ if(user && (await bcrypt.compare(password,user.password))){
     res.status(200).json({
         status:'Success',
         token,
-        data:{
-            
-            user
-        }
+        data:user
+        
     })
+} else {
+    throw new AppError('Incorrect', 401);
 }
+
 }
 
 export const upadteUser:RequestHandler = async(req,res,next)=>{

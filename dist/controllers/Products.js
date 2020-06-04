@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -16,30 +7,31 @@ exports.deleteProduct = exports.editProduct = exports.createProducts = exports.g
 const Products_1 = __importDefault(require("../model/Products"));
 const AppError_1 = __importDefault(require("../Error/AppError"));
 const Auth_1 = __importDefault(require("../model/Auth"));
-exports.getAllProducts = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const reqQuery = Object.assign({}, req.query);
+exports.getAllProducts = async (req, res, next) => {
+    const reqQuery = { ...req.query };
     delete reqQuery.owned;
     delete reqQuery.search;
+    const querySearch = req.query.search;
     let productQuery = Products_1.default.find(reqQuery);
     if (req.token && req.query.owned === 'true') {
-        const currentUserId = yield Auth_1.default.getIdFromJwt(req.token);
-        const currentUser = yield Auth_1.default.findById(currentUserId);
+        const currentUserId = await Auth_1.default.getIdFromJwt(req.token);
+        const currentUser = await Auth_1.default.findById(currentUserId);
         if (!(currentUser === null || currentUser === void 0 ? void 0 : currentUser.isAdmin())) {
             productQuery = productQuery.where('vendor').equals(currentUserId);
         }
     }
-    if (req.query.search) {
-        const searchKeyWord = req.query.search.split('+').join(' ');
+    if (querySearch) {
+        const searchKeyWord = querySearch.split('+').join(' ');
         productQuery.where('title').regex(new RegExp(searchKeyWord, 'i'));
     }
-    const products = yield productQuery;
+    const products = await productQuery;
     res.json({
         status: 'success',
         data: products
     });
-});
-exports.getProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const product = yield Products_1.default.findById(req.params.prodId);
+};
+exports.getProduct = async (req, res, next) => {
+    const product = await Products_1.default.findById(req.params.prodId).populate('vendor');
     if (!product) {
         throw new AppError_1.default('NO PRODUCTS', 404);
     }
@@ -47,10 +39,10 @@ exports.getProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         status: 'success',
         data: product
     });
-});
-exports.createProducts = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+exports.createProducts = async (req, res, next) => {
     const { title, description, role, imageUrl, price, tags, category, ratings, scadenza, maxQuantity, vendor } = req.body;
-    const newProduct = yield Products_1.default.create(req.body);
+    const newProduct = await Products_1.default.create(req.body);
     if (!newProduct) {
         throw new AppError_1.default('NO PRODUCTS', 404);
     }
@@ -58,9 +50,9 @@ exports.createProducts = (req, res, next) => __awaiter(void 0, void 0, void 0, f
         status: 'success',
         data: newProduct
     });
-});
-exports.editProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const product = yield Products_1.default.findById(req.params.prodId);
+};
+exports.editProduct = async (req, res, next) => {
+    const product = await Products_1.default.findById(req.params.prodId);
     if (!product) {
         throw new AppError_1.default('NO PRODUCTS', 404);
     }
@@ -83,9 +75,9 @@ exports.editProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, func
         status: 'success',
         data: product
     });
-});
-exports.deleteProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const product = yield Products_1.default.findById(req.params.prodId);
+};
+exports.deleteProduct = async (req, res, next) => {
+    const product = await Products_1.default.findById(req.params.prodId);
     if (!product) {
         throw new AppError_1.default('NO PRODUCTS', 404);
     }
@@ -98,10 +90,10 @@ exports.deleteProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             throw new AppError_1.default('NO PRODUCTS', 404);
         }
     }
-    yield Products_1.default.findByIdAndDelete(product._id);
+    await Products_1.default.findByIdAndDelete(product._id);
     res.status(204).json({
         status: 'success',
         data: null
     });
-});
+};
 //# sourceMappingURL=Products.js.map

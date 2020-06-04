@@ -10,8 +10,8 @@ router.route('/')
 .get(UserController.getAllUsers,protect)
 /// Routes For Updatings
 router.route('/userUpdatings')
-.patch(UserController.upadteUser,protect,restrictRole('admin'))
-.post(UserController.logOut,protect,restrictRole('admin'))
-.delete(UserController.deletAccount,protect,restrictRole('admin'))
+.patch(UserController.upadteUser,protect,restrictRole('admin' || 'vendor'))
+.post(UserController.logOut,protect,restrictRole('admin' || 'vendor'))
+.delete(UserController.deletAccount,protect,restrictRole('admin' || 'vendor'))
 
 export default router;

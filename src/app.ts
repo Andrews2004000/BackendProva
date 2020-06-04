@@ -18,8 +18,10 @@ import compression from 'compression';
 
 
 const csrfConnection = csrf({cookie:true});
-
+db.mongooseconnect()
 const app = express();
+app.use(compression());
+app.use(mongoSanitize());
 app.use(cors({credentials:true,origin:'localhost:8080'}))
 app.use(
     bearerToken({
@@ -32,17 +34,23 @@ app.use(
 );
 app.use(cookieParser('secret'))
 
+app.use(helmet());
 
-app.use(compression());
 app.use(xss());
-db.mongooseconnect()
-app.use(csrfConnection)
+app.get('/api/csrftoken', (req, res) => {
+    return res.json({ data: req.csrfToken() });
+});
+
+
 //BodyParser
 app.use(BodyParser.json())
 
 app.use('/api/v1/user',AuthRoutes);
-app.use('/api/v2/products',ProductsRoutes);
+app.use('/api/v1/products',ProductsRoutes);
 //Error Handling
+app.use('/api/', (req: Request, res: Response) => {
+    res.status(404).json({ message: 'Route Not Found' });
+});
 app.use((err:AppError,req:Request,res:Response,_:NextFunction)=>{
     res.status(err.statusCode || 500).json({
         status:'failed',
@@ -52,5 +60,6 @@ app.use((err:AppError,req:Request,res:Response,_:NextFunction)=>{
     })
 
 })
+app.listen(5000);
 
 export default app;

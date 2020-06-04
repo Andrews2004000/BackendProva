@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -30,21 +21,21 @@ function SendCookieToken(res, token) {
         });
     }
 }
-exports.signUp = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.signUp = async (req, res, next) => {
     let { username, email, password, confirmPassword, role } = req.body;
     if (!password) {
         throw new AppError_1.default('No Passowrd', 404);
     }
-    const HashPassword = yield bcrypt_1.default.hash(password, 12);
+    const HashPassword = await bcrypt_1.default.hash(password, 12);
     if (!HashPassword) {
         throw new AppError_1.default('No Passowrd', 404);
     }
     role = 'client';
-    const newUser = yield Auth_1.default.create();
+    const newUser = await Auth_1.default.create(req.body);
     if (!newUser) {
         throw new AppError_1.default('No Passowrd', 404);
     }
-    const token = yield newUser.getJwt();
+    const token = await newUser.getJwt();
     SendCookieToken(res, token);
     res.status(200).json({
         status: 'Success',
@@ -53,57 +44,58 @@ exports.signUp = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             newUser,
         }
     });
-});
-exports.login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+exports.login = async (req, res, next) => {
     const { email, password } = req.body;
-    if (!email && password) {
+    if (!email && !password) {
         throw new AppError_1.default('No Passowrd', 404);
     }
-    const user = yield Auth_1.default.findOne({ email }).select('+password');
-    if (user && (yield bcrypt_1.default.compare(password, user.password))) {
-        const token = yield user.getJwt();
+    const user = await Auth_1.default.findOne({ email }).select('+password');
+    if (user && (await bcrypt_1.default.compare(password, user.password))) {
+        const token = await user.getJwt();
         SendCookieToken(res, token);
         res.status(200).json({
             status: 'Success',
             token,
-            data: {
-                user
-            }
+            data: user
         });
     }
-});
-exports.upadteUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    else {
+        throw new AppError_1.default('Incorrect', 401);
+    }
+};
+exports.upadteUser = async (req, res, next) => {
     const body = req.body;
     const user = req.user;
     if (!user) {
         throw new AppError_1.default('No Passowrd', 404);
     }
-    const inputData = Object.assign({}, body);
+    const inputData = { ...body };
     if (inputData.password) {
-        inputData.password = yield bcrypt_1.default.hash(inputData.password, 12);
+        inputData.password = await bcrypt_1.default.hash(inputData.password, 12);
     }
     Object.keys(inputData).forEach((k) => {
         if (k in user) {
             user[k] = inputData[k];
         }
     });
-    yield user.save();
+    await user.save();
     res.status(201).json({
         status: 'success',
         data: {
             user
         }
     });
-});
-exports.logOut = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+exports.logOut = async (req, res, next) => {
     SendCookieToken(res);
     res.status(204).json({
         status: 'success',
         data: null
     });
-});
-exports.getAllUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield Auth_1.default.find();
+};
+exports.getAllUsers = async (req, res, next) => {
+    const users = await Auth_1.default.find();
     if (!users) {
         throw new AppError_1.default('No Passowrd', 404);
     }
@@ -113,8 +105,8 @@ exports.getAllUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, func
             users
         }
     });
-});
-exports.getOneUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+exports.getOneUser = async (req, res, next) => {
     const user = req.user;
     if (!user) {
         throw new AppError_1.default('No Passowrd', 404);
@@ -125,18 +117,18 @@ exports.getOneUser = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
             user
         }
     });
-});
-exports.deletAccount = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+exports.deletAccount = async (req, res, next) => {
     const user = req.user;
     if (!user) {
         throw new AppError_1.default('No Passowrd', 404);
     }
     const UserId = user.id;
-    yield Auth_1.default.findByIdAndDelete(UserId);
+    await Auth_1.default.findByIdAndDelete(UserId);
     SendCookieToken(res);
     res.status(204).json({
         status: 'success',
         data: null
     });
-});
+};
 //# sourceMappingURL=Authentication.js.map

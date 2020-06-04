@@ -28,11 +28,19 @@ const userSchema = new mongoose_1.default.Schema({
         required: true,
         unique: false,
     },
+    photo: [String],
+    phone: [Number],
     address: {
         type: String,
         required: false,
         unique: false,
     },
+    Country: [
+        {
+            type: String,
+            required: false,
+        }
+    ],
     role: {
         type: String,
         enum: ['vendor', 'client', 'admin'],

@@ -8,7 +8,9 @@ username:string,
 email:string,
 password:string,
 passwordConfirmation:string,
+photo?:[string],
 address?:string,
+phone:[number],
 role:'client'|'vendor'|'admin',
 StripeAccount?:string,
 passwordChangedAt:number,
@@ -52,16 +54,23 @@ const userSchema = new mongoose.Schema({
         unique:false,
 
     },
+    photo:[String],
+    phone:[Number],
     address:{
         type:String,
         required:false,
         unique:false,
 
     },
-    Country:{
-        type:String,
-        required:false,
-    },
+    Country:
+    [
+        {
+            type:String,
+            required:false,
+        }
+    ],
+        
+    
     role:{
         type:String,
         enum:['vendor','client','admin'],

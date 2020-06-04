@@ -8,6 +8,8 @@ router.route('/')
 .post(UserController.login)
 .put(UserController.signUp)
 .get(UserController.getAllUsers,protect)
+
+
 /// Routes For Updatings
 router.route('/userUpdatings')
 .patch(UserController.upadteUser,protect,restrictRole('admin' || 'vendor'))

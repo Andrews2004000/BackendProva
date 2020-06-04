@@ -28,10 +28,10 @@ const ProductsController = __importStar(require("../controllers/Products"));
 const router = express_promise_router_1.default();
 router.route('/')
     .get(ProductsController.getAllProducts)
-    .get(ProductsController.getProduct)
     .post(AppFeaures_1.protect, ProductsController.createProducts, AppFeaures_1.restrictRole('admin' || 'vendor'));
-router.route('/:prodid')
+router.route('/:prodId')
     .patch(AppFeaures_1.protect, ProductsController.editProduct, AppFeaures_1.restrictRole('admin' || 'vendor'))
-    .delete(AppFeaures_1.protect, ProductsController.deleteProduct);
+    .delete(AppFeaures_1.protect, ProductsController.deleteProduct)
+    .get(ProductsController.getProduct);
 exports.default = router;
 //# sourceMappingURL=Products.js.map

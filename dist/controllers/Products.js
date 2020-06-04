@@ -41,8 +41,8 @@ exports.getProduct = async (req, res, next) => {
     });
 };
 exports.createProducts = async (req, res, next) => {
-    const { title, description, role, imageUrl, price, tags, category, ratings, scadenza, maxQuantity, vendor } = req.body;
-    const newProduct = await Products_1.default.create(req.body);
+    const ProductData = { ...req.body };
+    const newProduct = await Products_1.default.create(ProductData);
     if (!newProduct) {
         throw new AppError_1.default('NO PRODUCTS', 404);
     }

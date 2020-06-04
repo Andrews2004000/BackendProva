@@ -31,7 +31,7 @@ const ProductsSchema = new mongoose.Schema({
     },
     size:{
         type:Number,
-        default:'Not Specified'
+        
     },
     colorsAvailable:{
     type:String,

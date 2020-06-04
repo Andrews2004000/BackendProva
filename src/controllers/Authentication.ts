@@ -8,7 +8,7 @@ import  {RequestHandler,Request,Response,NextFunction} from 'express'
 
 function SendCookieToken(res:Response,token?:string){
  if(token){
-     res.cookie(token,'access_token',{
+     res.cookie('access_token',token,{
          httpOnly:true,
          expires:new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
      })
@@ -24,20 +24,18 @@ function SendCookieToken(res:Response,token?:string){
 }
 
 export const signUp:RequestHandler = async(req,res,next)=>{
-let {username,email,password,confirmPassword,role} = req.body;
-if(!password){
+const userData = {...req.body}
+if(!userData.password){
     throw new AppError('No Passowrd',404)
 }
-const HashPassword = await bcrypt.hash(password,12)
+const HashPassword = await bcrypt.hash(userData.password,12)
 if(!HashPassword){
     throw new AppError('No Passowrd',404)
 }
-role = 'client'
+userData.role = 'client'
 
-const newUser = await User.create(req.body)
-if(!newUser){
-    throw new AppError('No Passowrd',404) 
-}
+const newUser = await User.create(userData)
+
 const token = await newUser.getJwt()
     SendCookieToken(res,token)
 

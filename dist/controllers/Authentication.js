@@ -9,7 +9,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const AppError_1 = __importDefault(require("../Error/AppError"));
 function SendCookieToken(res, token) {
     if (token) {
-        res.cookie(token, 'access_token', {
+        res.cookie('access_token', token, {
             httpOnly: true,
             expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
         });
@@ -22,19 +22,16 @@ function SendCookieToken(res, token) {
     }
 }
 exports.signUp = async (req, res, next) => {
-    let { username, email, password, confirmPassword, role } = req.body;
-    if (!password) {
+    const userData = { ...req.body };
+    if (!userData.password) {
         throw new AppError_1.default('No Passowrd', 404);
     }
-    const HashPassword = await bcrypt_1.default.hash(password, 12);
+    const HashPassword = await bcrypt_1.default.hash(userData.password, 12);
     if (!HashPassword) {
         throw new AppError_1.default('No Passowrd', 404);
     }
-    role = 'client';
-    const newUser = await Auth_1.default.create(req.body);
-    if (!newUser) {
-        throw new AppError_1.default('No Passowrd', 404);
-    }
+    userData.role = 'client';
+    const newUser = await Auth_1.default.create(userData);
     const token = await newUser.getJwt();
     SendCookieToken(res, token);
     res.status(200).json({

@@ -42,8 +42,8 @@ export const getProduct:RequestHandler = async (req,res,next)=>{
     })
 }
 export const createProducts:RequestHandler = async (req,res,next)=>{
-    const {title,description,role,imageUrl,price,tags,category,ratings,scadenza,maxQuantity,vendor} = req.body
-    const newProduct = await Product.create(req.body)
+   const ProductData = {...req.body};
+    const newProduct = await Product.create(ProductData)
     if(!newProduct){
         throw new AppError('NO PRODUCTS',404)
     }

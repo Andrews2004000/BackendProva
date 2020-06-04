@@ -35,7 +35,6 @@ const ProductsSchema = new mongoose_1.default.Schema({
     },
     size: {
         type: Number,
-        default: 'Not Specified'
     },
     colorsAvailable: {
         type: String,

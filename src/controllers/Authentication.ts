@@ -43,10 +43,10 @@ const token = await newUser.getJwt()
 res.status(200).json({
     status:'Success',
     token,
-    data:{
+    data:
         newUser,
         
-    }
+    
 })
 
 }
@@ -61,7 +61,7 @@ if(user && (await bcrypt.compare(password,user.password))){
     const token = await user.getJwt()
     SendCookieToken(res,token)
     res.status(200).json({
-        status:'Success',
+        status:'Success Login',
         token,
         data:user
         
@@ -76,7 +76,7 @@ export const upadteUser:RequestHandler = async(req,res,next)=>{
     const body = req.body as Partial<IUser>
     const user = req.user
     if(!user){
-        throw new AppError('No Passowrd',404)
+        throw new AppError('NO uSER DATA')
     }
     const inputData:any = {...body}
     if(inputData.password){
@@ -97,6 +97,7 @@ export const upadteUser:RequestHandler = async(req,res,next)=>{
     })
 }
 export const logOut:RequestHandler = async (req,res,next)=>{
+    
     SendCookieToken(res)
     res.status(204).json({
         status:'success',

@@ -9,11 +9,11 @@ const AppError_1 = __importDefault(require("../Error/AppError"));
 const Auth_1 = __importDefault(require("../model/Auth"));
 exports.getAllProducts = async (req, res, next) => {
     const reqQuery = { ...req.query };
-    delete reqQuery.owned;
+    delete req.query.owned;
     delete reqQuery.search;
     const querySearch = req.query.search;
     let productQuery = Products_1.default.find(reqQuery);
-    if (req.token && req.query.owned === 'true') {
+    if (req.token && req.query.owned == 'true') {
         const currentUserId = await Auth_1.default.getIdFromJwt(req.token);
         const currentUser = await Auth_1.default.findById(currentUserId);
         if (!(currentUser === null || currentUser === void 0 ? void 0 : currentUser.isAdmin())) {
@@ -41,7 +41,9 @@ exports.getProduct = async (req, res, next) => {
     });
 };
 exports.createProducts = async (req, res, next) => {
+    var _a;
     const ProductData = { ...req.body };
+    ProductData.vendor = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
     const newProduct = await Products_1.default.create(ProductData);
     if (!newProduct) {
         throw new AppError_1.default('NO PRODUCTS', 404);

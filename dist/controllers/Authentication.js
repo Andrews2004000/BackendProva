@@ -39,9 +39,7 @@ exports.signUp = async (req, res, next) => {
     res.status(200).json({
         status: 'Success',
         token,
-        data: {
-            newUser,
-        }
+        data: newUser,
     });
 };
 exports.login = async (req, res, next) => {
@@ -54,7 +52,7 @@ exports.login = async (req, res, next) => {
         const token = await user.getJwt();
         SendCookieToken(res, token);
         res.status(200).json({
-            status: 'Success',
+            status: 'Success Login',
             token,
             data: user
         });
@@ -67,7 +65,7 @@ exports.upadteUser = async (req, res, next) => {
     const body = req.body;
     const user = req.user;
     if (!user) {
-        throw new AppError_1.default('No Passowrd', 404);
+        throw new AppError_1.default('NO uSER DATA');
     }
     const inputData = { ...body };
     if (inputData.password) {

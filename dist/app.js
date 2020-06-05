@@ -40,7 +40,7 @@ db.mongooseconnect();
 const app = express_1.default();
 app.use(compression_1.default());
 app.use(express_mongo_sanitize_1.default());
-app.use(cors_1.default({ credentials: true, origin: 'localhost:8080' }));
+app.use(cors_1.default({ credentials: true, origin: 'http://localhost:8080' }));
 app.use(express_bearer_token_1.default({
     cookie: {
         signed: true,

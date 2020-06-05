@@ -7,13 +7,13 @@ const router = ExpressPromiseRouter();
 router.route('/')
 .post(UserController.login)
 .put(UserController.signUp)
-.get(UserController.getAllUsers,protect)
+.get(protect,UserController.getAllUsers)
 
 
 /// Routes For Updatings
 router.route('/userUpdatings')
-.patch(UserController.upadteUser,protect,restrictRole('admin' || 'vendor'))
-.post(UserController.logOut,protect,restrictRole('admin' || 'vendor'))
-.delete(UserController.deletAccount,protect,restrictRole('admin' || 'vendor'))
+.patch(protect,restrictRole('admin' || 'vendor'||'client' ),UserController.upadteUser)
+.post(protect,restrictRole('admin' || 'vendor'|| 'client'),UserController.logOut,)
+.delete(protect,restrictRole('admin' || 'vendor'|| 'client'),UserController.deletAccount)
 
 export default router;

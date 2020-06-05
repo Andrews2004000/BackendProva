@@ -30,11 +30,11 @@ const router = express_promise_router_1.default();
 router.route('/')
     .post(UserController.login)
     .put(UserController.signUp)
-    .get(UserController.getAllUsers, AppFeaures_1.protect);
+    .get(AppFeaures_1.protect, UserController.getAllUsers);
 /// Routes For Updatings
 router.route('/userUpdatings')
-    .patch(UserController.upadteUser, AppFeaures_1.protect, AppFeaures_1.restrictRole('admin' || 'vendor'))
-    .post(UserController.logOut, AppFeaures_1.protect, AppFeaures_1.restrictRole('admin' || 'vendor'))
-    .delete(UserController.deletAccount, AppFeaures_1.protect, AppFeaures_1.restrictRole('admin' || 'vendor'));
+    .patch(AppFeaures_1.protect, AppFeaures_1.restrictRole('admin' || 'vendor' || 'client'), UserController.upadteUser)
+    .post(AppFeaures_1.protect, AppFeaures_1.restrictRole('admin' || 'vendor' || 'client'), UserController.logOut)
+    .delete(AppFeaures_1.protect, AppFeaures_1.restrictRole('admin' || 'vendor' || 'client'), UserController.deletAccount);
 exports.default = router;
 //# sourceMappingURL=Auth.js.map

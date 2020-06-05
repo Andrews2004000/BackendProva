@@ -6,12 +6,12 @@ import User from '../model/Auth'
 
 export const getAllProducts:RequestHandler = async(req,res,next)=>{
     const reqQuery = {...req.query}
-    delete reqQuery.owned;
+  delete req.query.owned;
     delete reqQuery.search;
    const querySearch = req.query.search as string;
     let productQuery =  Product.find(reqQuery)
 
-    if(req.token && req.query.owned === 'true'){
+    if(req.token && req.query.owned == 'true'){
         const currentUserId = await User.getIdFromJwt(req.token)
         const currentUser = await User.findById(currentUserId)
         if(!currentUser?.isAdmin()){
@@ -43,7 +43,9 @@ export const getProduct:RequestHandler = async (req,res,next)=>{
 }
 export const createProducts:RequestHandler = async (req,res,next)=>{
    const ProductData = {...req.body};
+   ProductData.vendor = req.user?._id;
     const newProduct = await Product.create(ProductData)
+   
     if(!newProduct){
         throw new AppError('NO PRODUCTS',404)
     }

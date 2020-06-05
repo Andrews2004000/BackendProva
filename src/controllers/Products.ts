@@ -21,7 +21,7 @@ export const getAllProducts:RequestHandler = async(req,res,next)=>{
         if(querySearch){
           
             const searchKeyWord = querySearch.split('+').join(' ') as string;
-            productQuery.where('title' || 'price').regex(new RegExp(searchKeyWord,'i'))
+            productQuery.where('title').regex(new RegExp(searchKeyWord,'i'))
         
     }
     const products = await productQuery;

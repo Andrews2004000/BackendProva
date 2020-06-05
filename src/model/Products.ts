@@ -34,14 +34,14 @@ const ProductsSchema = new mongoose.Schema({
         type:Number,
         
     },
-    tags:[
+    tags:
         {
             type:String,
     enum:["videogames","phones","computers","fantasy","action","history","livingroom","garden","bedroom"],
     default:"Not Specified"
 
-        }
-    ],
+        },
+    
     colorsAvailable:{
     type:String,
     enum:["red","blue","green","yellow","grey","Black","All Available"],

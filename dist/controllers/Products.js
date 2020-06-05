@@ -22,7 +22,7 @@ exports.getAllProducts = async (req, res, next) => {
     }
     if (querySearch) {
         const searchKeyWord = querySearch.split('+').join(' ');
-        productQuery.where('title' || 'price').regex(new RegExp(searchKeyWord, 'i'));
+        productQuery.where('title').regex(new RegExp(searchKeyWord, 'i'));
     }
     const products = await productQuery;
     res.json({

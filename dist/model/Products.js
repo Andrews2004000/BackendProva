@@ -36,13 +36,11 @@ const ProductsSchema = new mongoose_1.default.Schema({
     size: {
         type: Number,
     },
-    tags: [
-        {
-            type: String,
-            enum: ["videogames", "phones", "computers", "fantasy", "action", "history", "livingroom", "garden", "bedroom"],
-            default: "Not Specified"
-        }
-    ],
+    tags: {
+        type: String,
+        enum: ["videogames", "phones", "computers", "fantasy", "action", "history", "livingroom", "garden", "bedroom"],
+        default: "Not Specified"
+    },
     colorsAvailable: {
         type: String,
         enum: ["red", "blue", "green", "yellow", "grey", "Black", "All Available"],

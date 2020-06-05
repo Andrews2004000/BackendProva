@@ -85,8 +85,11 @@ export const upadteUser:RequestHandler = async(req,res,next)=>{
     Object.keys(inputData).forEach((k) => {
         if (k in user) {
             user[k] = inputData[k];
+            
         }
+       
     });
+    
     await user.save()
     res.status(201).json({
         status:'success',
@@ -96,6 +99,7 @@ export const upadteUser:RequestHandler = async(req,res,next)=>{
 
     })
 }
+
 export const logOut:RequestHandler = async (req,res,next)=>{
     
     SendCookieToken(res)

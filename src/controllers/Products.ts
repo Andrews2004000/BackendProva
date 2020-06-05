@@ -6,12 +6,12 @@ import User from '../model/Auth'
 
 export const getAllProducts:RequestHandler = async(req,res,next)=>{
     const reqQuery = {...req.query}
-  delete req.query.owned;
+    delete reqQuery.owned;
     delete reqQuery.search;
    const querySearch = req.query.search as string;
     let productQuery =  Product.find(reqQuery)
 
-    if(req.token && req.query.owned == 'true'){
+    if(req.token &&  req.query.owned == 'true'){
         const currentUserId = await User.getIdFromJwt(req.token)
         const currentUser = await User.findById(currentUserId)
         if(!currentUser?.isAdmin()){
@@ -21,7 +21,7 @@ export const getAllProducts:RequestHandler = async(req,res,next)=>{
         if(querySearch){
           
             const searchKeyWord = querySearch.split('+').join(' ') as string;
-            productQuery.where('title').regex(new RegExp(searchKeyWord,'i'))
+            productQuery.where('title' || 'price').regex(new RegExp(searchKeyWord,'i'))
         
     }
     const products = await productQuery;
@@ -61,11 +61,11 @@ export const editProduct:RequestHandler = async (req,res,next)=>{
   }
   const user = req.user
   if(!user){
-    throw new AppError('NO PRODUCTS',404)
+    throw new AppError('NO User',404)
   }
   if(user.role !== 'admin'){
       if(user.vendor._id.toString() !== user._id.toString()){
-        throw new AppError('NO PRODUCTS',404)
+        throw new AppError('NO Capable',404)
       }
    
   }
@@ -94,7 +94,7 @@ export const deleteProduct:RequestHandler = async(req,res,next)=>{
     }
     if(user.role !== 'admin'){
         if(product.vendor._id.toString() !== user._id.toString()){
-            throw new AppError('NO PRODUCTS',404)
+            throw new AppError('NO Capable',404)
 
         }
     }

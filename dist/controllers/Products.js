@@ -9,7 +9,7 @@ const AppError_1 = __importDefault(require("../Error/AppError"));
 const Auth_1 = __importDefault(require("../model/Auth"));
 exports.getAllProducts = async (req, res, next) => {
     const reqQuery = { ...req.query };
-    delete req.query.owned;
+    delete reqQuery.owned;
     delete reqQuery.search;
     const querySearch = req.query.search;
     let productQuery = Products_1.default.find(reqQuery);
@@ -22,7 +22,7 @@ exports.getAllProducts = async (req, res, next) => {
     }
     if (querySearch) {
         const searchKeyWord = querySearch.split('+').join(' ');
-        productQuery.where('title').regex(new RegExp(searchKeyWord, 'i'));
+        productQuery.where('title' || 'price').regex(new RegExp(searchKeyWord, 'i'));
     }
     const products = await productQuery;
     res.json({
@@ -60,11 +60,11 @@ exports.editProduct = async (req, res, next) => {
     }
     const user = req.user;
     if (!user) {
-        throw new AppError_1.default('NO PRODUCTS', 404);
+        throw new AppError_1.default('NO User', 404);
     }
     if (user.role !== 'admin') {
         if (user.vendor._id.toString() !== user._id.toString()) {
-            throw new AppError_1.default('NO PRODUCTS', 404);
+            throw new AppError_1.default('NO Capable', 404);
         }
     }
     Object.keys(req.body).forEach((k) => {
@@ -89,7 +89,7 @@ exports.deleteProduct = async (req, res, next) => {
     }
     if (user.role !== 'admin') {
         if (product.vendor._id.toString() !== user._id.toString()) {
-            throw new AppError_1.default('NO PRODUCTS', 404);
+            throw new AppError_1.default('NO Capable', 404);
         }
     }
     await Products_1.default.findByIdAndDelete(product._id);

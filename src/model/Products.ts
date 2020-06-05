@@ -7,6 +7,7 @@ export interface IUproducts extends mongoose.Document{
     price:number,
     scadenza?:Date,
     size?:[number],
+    tags?:"videogames"|"phones"|"computers"|"fantasy"|"action"|"history"|"livingroom"|"garden"|"bedroom",
     colorsAvailable?:"red"|"blue"|"green"|"yellow"|"grey"|"Black"|"All Available",
     category:'Tecnology'|'House'|'Book'|'Not Specified',
     ratings:number,
@@ -33,6 +34,14 @@ const ProductsSchema = new mongoose.Schema({
         type:Number,
         
     },
+    tags:[
+        {
+            type:String,
+    enum:["videogames","phones","computers","fantasy","action","history","livingroom","garden","bedroom"],
+    default:"Not Specified"
+
+        }
+    ],
     colorsAvailable:{
     type:String,
     enum:["red","blue","green","yellow","grey","Black","All Available"],

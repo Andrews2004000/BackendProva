@@ -14,7 +14,7 @@ exports.protect = async (req, res, next) => {
     const id = await Auth_1.default.getIdFromJwt(token);
     const currentUser = await Auth_1.default.findById(id);
     if (!currentUser) {
-        throw new AppError_1.default('You have no Permissions', 404);
+        throw new AppError_1.default('You have no Permissions on it', 404);
     }
     req.user = currentUser;
     next();

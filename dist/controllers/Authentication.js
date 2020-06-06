@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletAccount = exports.getOneUser = exports.getAllUsers = exports.logOut = exports.upadteUser = exports.login = exports.signUp = void 0;
+exports.deletAccount = exports.getOneUser = exports.getAllUsers = exports.Logout = exports.upadteUser = exports.login = exports.signUp = void 0;
 const Auth_1 = __importDefault(require("../model/Auth"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const AppError_1 = __importDefault(require("../Error/AppError"));
@@ -84,7 +84,7 @@ exports.upadteUser = async (req, res, next) => {
         }
     });
 };
-exports.logOut = async (req, res, next) => {
+exports.Logout = async (req, res, next) => {
     SendCookieToken(res);
     res.status(204).json({
         status: 'success',

@@ -34,7 +34,7 @@ router.route('/')
 /// Routes For Updatings
 router.route('/userUpdatings')
     .patch(AppFeaures_1.protect, AppFeaures_1.restrictRole('admin' || 'vendor' || 'client'), UserController.upadteUser)
-    .post(AppFeaures_1.protect, AppFeaures_1.restrictRole('admin' || 'vendor' || 'client'), UserController.logOut)
+    .post(AppFeaures_1.protect, AppFeaures_1.restrictRole('admin' || 'vendor' || 'client'), UserController.Logout)
     .delete(AppFeaures_1.protect, AppFeaures_1.restrictRole('admin' || 'vendor' || 'client'), UserController.deletAccount);
 exports.default = router;
 //# sourceMappingURL=Auth.js.map

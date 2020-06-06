@@ -12,9 +12,9 @@ export const protect:RequestHandler = async(req,res,next)=>{
     }
     const id = await User.getIdFromJwt(token)
     const currentUser = await User.findById(id)
-    if(!currentUser){
-        throw new AppError('You have no Permissions',404)
-    }
+   if(!currentUser){
+    throw new AppError('You have no Permissions on it',404)
+   }
     req.user = currentUser;
     next()
 }

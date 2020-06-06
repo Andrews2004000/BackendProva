@@ -28,7 +28,7 @@ const ProductsController = __importStar(require("../controllers/Products"));
 const router = express_promise_router_1.default();
 router.route('/')
     .get(ProductsController.getAllProducts)
-    .post(AppFeaures_1.protect, ProductsController.createProducts, AppFeaures_1.restrictRole('admin' || 'vendor'));
+    .post(AppFeaures_1.protect, ProductsController.createProducts, AppFeaures_1.restrictRole('admin' || 'vendor' || 'client'));
 router.route('/:prodId')
     .patch(AppFeaures_1.protect, ProductsController.editProduct, AppFeaures_1.restrictRole('admin' || 'vendor'))
     .delete(AppFeaures_1.protect, ProductsController.deleteProduct)

@@ -100,7 +100,7 @@ export const upadteUser:RequestHandler = async(req,res,next)=>{
     })
 }
 
-export const logOut:RequestHandler = async (req,res,next)=>{
+export const Logout:RequestHandler = async (req,res,next)=>{
     
     SendCookieToken(res)
     res.status(204).json({
